@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Text, View, Platform, KeyboardAvoidingView  } from "react-native";
-import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat, InputToolbar } from 'react-native-gifted-chat';
+import AsyncStorage from '@react-native-community/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 
 //Import Firestone
 const firebase = require('firebase');
@@ -35,7 +37,93 @@ export default class Chat extends Component {
     this.referenceMessages = firebase.firestore().collection("messages");
   }
 
+  onCollectionUpdate = (querySnapshot) => {
+    const messages = [];
+    //Loop through documents
+    querySnapshot.forEach((doc) => {
+      //Get data snapshot
+      let data = doc.data();
+
+      messages.push({
+        _id: data._id,
+        text: data.text,
+        createdAt: data.createdAt.toDate(),
+        user: {
+          _id: data.user._id,
+          name: data.user.name,
+          avatar: data.user.avatar,
+        },
+      });
+    });
+    this.setState({
+      messages,
+    });
+  };
+  
+  addMessage() { 
+    //Adds new messages to the collection
+    const message = this.state.messages[0];
+    this.referenceMessages.add({
+      _id: message._id,
+      text: message.text,
+      createdAt: message.createdAt,
+      user: message.user,
+      
+    });
+  };
+
+  //Function called when user sends a message
+  onSend(messages = []) {
+    this.setState(
+      (previousState) => ({
+        messages: GiftedChat.append(previousState.messages, messages),
+      }),
+      () => {
+        this.addMessage();
+      }
+    );
+  }
+  
+  async saveMessages() {
+    try {
+      await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async getMessages() {
+    let messages = '';
+    try {
+      messages = await AsyncStorage.getItem('messages') || [];
+      this.setState({
+        messages: JSON.parse(messages)
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async deleteMessages() {
+    try {
+      await AsyncStorage.removeItem('messages');
+      this.setState({
+        messages: []
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   componentDidMount() {
+    NetInfo.fetch().then(connection => {
+      if (connection.isConnected) {
+        console.log('online');
+      } else {
+        console.log('offline');
+      }
+    });
+    this.getMessages();
     let name = this.props.route.params.name;
     this.props.navigation.setOptions({ title: name });
     this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
@@ -61,52 +149,16 @@ export default class Chat extends Component {
      this.authUnsubscribe();
   }
 
-  //Function called when user sends a message
-  onSend(messages = []) {
-    this.setState(
-      (previousState) => ({
-        messages: GiftedChat.append(previousState.messages, messages),
-      }),
-      () => {
-        this.addMessage();
-      }
-    );
+  renderInputToolbar(props) {
+    if (this.state.isConnected == false) {
+    } else {
+      return(
+        <InputToolbar
+        {...props}
+        />
+      );
+    }
   }
-
-  onCollectionUpdate = (querySnapshot) => {
-    const messages = [];
-    //Loop through documents
-    querySnapshot.forEach((doc) => {
-      //Get data snapshot
-      let data = doc.data();
-
-      messages.push({
-        _id: data._id,
-        text: data.text,
-        createdAt: data.createdAt.toDate(),
-        user: {
-          _id: data.user._id,
-          name: data.user.name,
-          avatar: data.user.avatar,
-        },
-      });
-    });
-    this.setState({
-      messages,
-    });
-  };
-
-  addMessage() { 
-    //Adds new messages to the collection
-    const message = this.state.messages[0];
-    this.referenceMessages.add({
-      _id: message._id,
-      text: message.text,
-      createdAt: message.createdAt,
-      user: message.user,
-      
-    });
-  };
   
   render() {
     return (
@@ -116,6 +168,7 @@ export default class Chat extends Component {
         messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
         user={this.state.user}
+        renderInputToolbar={this.renderInputToolbar.bind(this)}
         />
         { Platform.OS === 'android' ?
          <KeyboardAvoidingView behavior="height" /> : null
