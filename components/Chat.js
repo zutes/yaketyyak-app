@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, KeyboardAvoidingView, Platform, Image } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Platform, Image, LogBox } from 'react-native';
 import { GiftedChat, InputToolbar } from 'react-native-gifted-chat';
 import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
@@ -67,7 +67,7 @@ export default class Chat extends React.Component {
         this.getMessages();
       }
     });
-    
+    LogBox.ignoreLogs(['Setting a timer']);
     this.referenceMessages = firebase.firestore().collection('messages');
   }
   
