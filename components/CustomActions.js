@@ -155,5 +155,5 @@ const styles = StyleSheet.create({
 });
 
 CustomActions.contextTypes = {
-  actionSheet: PropTypes.func
+  actionSheet: PropTypes.func,
 };
