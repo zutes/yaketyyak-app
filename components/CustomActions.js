@@ -13,8 +13,8 @@ export default class CustomActions extends React.Component {
   }
 
   pickImage = async () => {
+    try {
     const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
-  
     if(status === 'granted') {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -26,8 +26,13 @@ export default class CustomActions extends React.Component {
       }
     }
   }
+  catch (error) {
+    console.log(error);
+  }
+}
 
   takePhoto = async () => {
+    try{
     const { status } = await Permissions.askAsync(Permissions.CAMERA, Permissions.MEDIA_LIBRARY);
   
     if(status === 'granted') {
@@ -41,8 +46,13 @@ export default class CustomActions extends React.Component {
       }
     }
   }
+  catch (error) {
+    console.log(error);
+  }
+}
 
   getLocation = async () => {
+    try {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
   
     if(status === 'granted'){
@@ -58,8 +68,13 @@ export default class CustomActions extends React.Component {
       }
     }
   }
+  catch (error) {
+    console.log(error);
+  }
+}
 
   uploadImage = async(uri) => {
+    try {
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function() {
@@ -87,6 +102,10 @@ export default class CustomActions extends React.Component {
       console.log(imageURL);
       return imageURL;
   }
+  catch (error) {
+    console.log(error);
+  }
+}
 
 onActionPress = () => {
   const options = ['Choose Pic From Library', 'Take Pic',
