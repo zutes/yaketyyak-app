@@ -55,7 +55,7 @@ export default class Chat extends React.Component {
               name: this.props.route.params.name,
               avatar: 'https://placeimg.com/140/140/any'
             },
-            loggedInText: `${this.props.route.params.name} has entered the chat`,
+            loggedInText: `${this.props.route.params.name} has entered the chat. Welcome, start yakking!`,
             messages: []
           });
           this.unsubscribe = this.referenceMessages.onSnapshot(this.onCollectionUpdate)
