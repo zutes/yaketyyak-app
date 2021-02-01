@@ -12,6 +12,11 @@ export default class CustomActions extends React.Component {
     super();
   }
 
+  /**
+   * Requests user permission to pick image from library
+   * @async
+   * @function pickImage
+   */
   pickImage = async () => {
     try {
     const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
@@ -31,6 +36,11 @@ export default class CustomActions extends React.Component {
   }
 }
 
+/**
+ * Requests user permission to access camera to take photo
+ * @async
+ * @function takePhoto
+ */  
   takePhoto = async () => {
     try{
     const { status } = await Permissions.askAsync(Permissions.CAMERA, Permissions.MEDIA_LIBRARY);
@@ -51,6 +61,11 @@ export default class CustomActions extends React.Component {
   }
 }
 
+  /**
+   * Requests user permission to access location data
+   * @async
+   * @function  getLocation
+   */
   getLocation = async () => {
     try {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -73,6 +88,13 @@ export default class CustomActions extends React.Component {
   }
 }
 
+  /**
+   * Converts image to blob to store in Firebase cloud
+   * @async
+   * @function uploadImage
+   * @param {string} uri
+   * @returns {string}
+   */
   uploadImage = async(uri) => {
     try {
     const blob = await new Promise((resolve, reject) => {
@@ -107,6 +129,11 @@ export default class CustomActions extends React.Component {
   }
 }
 
+/**
+ * Returns user action
+ * @function onActionPress
+ * @return {actionSheet}
+ */
 onActionPress = () => {
   const options = ['Choose Pic From Library', 'Take Pic',
 'Send Location', 'Cancel'];
