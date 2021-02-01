@@ -76,6 +76,11 @@ export default class Chat extends React.Component {
      this.authUnsubscribe();
   }
   
+  /**
+   * @function onSend
+   * @param {*} messages 
+   * @return {state}
+   */
   onSend( messages = [] ) {
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages,
@@ -88,6 +93,15 @@ export default class Chat extends React.Component {
     );
   }
   
+  /**
+   * Adds messages
+   * @function addMessage
+   * @param _id - message _id
+   * @param {string}  text - message text
+   * @param {date} date - message data
+   * @param {string} image - message image
+   * @param {number} location - message location
+   */
   addMessage() {
     const message = this.state.messages[0];
     this.referenceMessages.add({
@@ -101,6 +115,13 @@ export default class Chat extends React.Component {
     console.log(message);
   }
   
+  /**
+   * Loads messages from AsyncStorage
+   * @function getMessages
+   * @async
+   * @param {string} messages
+   * @return {state} messages
+   */
   async getMessages() {
     let messages = '';
     try {
@@ -113,6 +134,12 @@ export default class Chat extends React.Component {
     }
   }
   
+  /**
+   * Saves messages to AsyncStorage
+   * @function saveMessages
+   * @async
+   * @return {AsyncStorage}
+   */
   async saveMessages() {
     try {
       await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
@@ -121,6 +148,12 @@ export default class Chat extends React.Component {
     }
   }
   
+  /**
+   * Deletes messages from AsyncStorage
+   * @function deleteMessages
+   * @async
+   * @return {AsyncStorage}
+   */
   async deleteMessages() {
     try {
       await AsyncStorage.removeItem('messsages');
@@ -132,6 +165,16 @@ export default class Chat extends React.Component {
     }
   }
   
+  /**
+   * Updates message state
+   * @function onCollectionUpdate
+   * @param {*} querySnapshot 
+   * @param {string}  _id - data _id
+   * @param {string}  text - data text
+   * @param {date}   date - data date
+   * @param {string} image - data image
+   * @param {number} location - data location
+   */
   onCollectionUpdate = (querySnapshot) => {
     const messages = [];
     querySnapshot.forEach((doc) => {
@@ -154,6 +197,12 @@ export default class Chat extends React.Component {
     });
   }
   
+  /**
+   * If user online, renders input toolbar
+   * @function renderInputToolbar
+   * @param {*} props 
+   * @returns {InputToolbar}
+   */
   renderInputToolbar(props) {
     if (this.state.isConnected == false) {
     } else {
@@ -165,6 +214,12 @@ export default class Chat extends React.Component {
     }
   }
   
+  /**
+   * Renders the mapview if location coordinates exist
+   * @function renderCustomView
+   * @param {*} props 
+   * @returns {MapView}
+   */
   renderCustomView(props) {
     const { currentMessage } = props;
   
@@ -189,6 +244,12 @@ export default class Chat extends React.Component {
     return null;
   }
   
+  /**
+   * Renders the take pic, choose pic and share location
+   * @function renderCustomActions
+   * @param {*} props 
+   * @return {CustomActions}
+   */
   renderCustomActions = (props) => {
     return <CustomActions {...props} />;
   }
