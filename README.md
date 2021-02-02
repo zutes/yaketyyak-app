@@ -21,12 +21,12 @@ Android Studio steps:<br>
 Goodle Firebase steps:<br>
 1 - Install Firebase: $ npm install --save firebase@7.9.0<br>
 2 - Configure your database to store messages using the following format [Gifted Chat Message Object](https://github.com/FaridSafi/react-native-gifted-chat#message-object)<br>
-3 - Install async storage for offline yaketyyak-app use: expo install @react-native-community/async-storage<br>
+3 - Install async storage for offline yaketyyak-app use: $ expo install @react-native-community/async-storage<br>
 4 - Configure [Google Firebase Cloud Storage](https://firebase.google.com/products/storage/) to store chat images<br>
 
 # Final Steps
 
-1 - Run your Expo project with: $ npm start or $ expo start<br>
+1 - Run your Expo project with: $ npm start (or) $ expo start<br>
 2 - Get to Yakking!<br><br>
 
 [Kanban Board](https://trello.com/b/8Xn7HWAC/chat-app-kanban)
