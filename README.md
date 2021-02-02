@@ -5,7 +5,7 @@ Yaketyyak-app is a chat application created using React Native. It is developed 
 ## Installation
 
 Expo Steps:
-1 - Install or update [Node](https://nodejs.org/en/)
+1 - Install or update [Node](https://nodejs.org/en/) <br>
 2 - Install Expo CLI: $ npm install expo-cli --global
 3 - Create an Expo account using their [sign-up page](https://expo.io/signup)
 4 - Create your project: $ expo init yaketyyak-app
